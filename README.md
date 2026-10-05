@@ -7,6 +7,7 @@ gain, maintain and lose control after scoring.
 
 ### ⚽ [Open the Live Interactive Dashboard](https://newcastle-united-performance-analysis.streamlit.app/)
 ### 📄 [Read the One-Page Executive Summary](Newcastle_United_Analytics_Executive_Summary.pdf)
+### 📊 [Read the Full 14-Page Analytics Report](Newcastle_United_Complete_Analytics_Report_FIXED.docx)
 
 ## Research Question
 
