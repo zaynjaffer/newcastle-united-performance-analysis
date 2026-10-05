@@ -5,7 +5,7 @@ gain, maintain and lose control after scoring.
 
 ## Interactive Dashboard
 
-👉 https://newcastle-united-performance-analysis.streamlit.app/
+### ⚽ [Open the Live Interactive Dashboard](https://newcastle-united-performance-analysis.streamlit.app/)
 
 ## Research Question
 
