@@ -7,7 +7,7 @@ import streamlit as st
 
 st.set_page_config(page_title='NUFC Post-Goal Control', page_icon='⚫', layout='wide')
 BASE=Path(__file__).parent
-DATA=BASE/'data'
+DATA=BASE
 
 @st.cache_data
 def load_data():
