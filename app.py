@@ -150,17 +150,30 @@ elif page=='Players & units':
     st.dataframe(pp.head(20),use_container_width=True,hide_index=True)
 
 elif page=='Match explorer':
-    opts=sorted(W.opponent.dropna().unique())
+    # Use the shot table as the fixture index because it contains all 38 league matches.
+    # Goal Windows / Goals contain only matches with qualifying goal events, so using
+    # them to build these selectors can hide valid 0-0 or otherwise absent fixtures.
+    fixtures=S[['match_id','opponent','venue']].drop_duplicates().copy()
+    opts=sorted(fixtures.opponent.dropna().unique())
     opp=st.selectbox('Opponent',opts)
-    venue=st.selectbox('Venue',sorted(W[W.opponent==opp].venue.unique()))
-    mid=W[(W.opponent==opp)&(W.venue==venue)].match_id.iloc[0]
+    venues=sorted(fixtures.loc[fixtures.opponent==opp,'venue'].dropna().unique())
+    venue=st.selectbox('Venue',venues)
+    mid=fixtures[(fixtures.opponent==opp)&(fixtures.venue==venue)].match_id.iloc[0]
+
     st.subheader(f'{"Newcastle vs" if venue=="Home" else "Away at"} {opp}')
     goals=G[G.match_id==mid].sort_values('t')
-    st.dataframe(goals[['minute','added_time','player_name','event','state_after']],hide_index=True,use_container_width=True)
+    if len(goals):
+        st.dataframe(goals[['minute','added_time','player_name','event','state_after']],hide_index=True,use_container_width=True)
+    else:
+        st.caption('No goals recorded in this match.')
+
     shots=S[S.match_id==mid].copy(); shots['is_nufc']=shots.team.eq('Newcastle United')
     st.plotly_chart(pitch_scatter(shots,'All shots in match'),use_container_width=True)
     q=W[(W.match_id==mid)&(W.window==15)&(W.complete_window==True)]
-    if len(q): st.dataframe(q[['goal_event','goal_minute','opening_goal','state_after','shots_diff','sot_diff','xg_diff','PGCI']],hide_index=True,use_container_width=True)
+    if len(q):
+        st.dataframe(q[['goal_event','goal_minute','opening_goal','state_after','shots_diff','sot_diff','xg_diff','PGCI']],hide_index=True,use_container_width=True)
+    else:
+        st.caption('No complete 15-minute post-goal window is available for this match.')
 
 else:
     st.header('Methodology')
@@ -176,6 +189,3 @@ else:
 **Player analysis.** A player counts as present only when he remains on the pitch for the entire 15-minute post-score window. Pair and player outputs are descriptive associations and should be used to identify video-review questions, not to claim causal player effects.
 
 **Territorial pressure.** The source dataset's minute-level momentum signal is used as a territory/pressure proxy and re-signed so positive values favour Newcastle. It is not possession percentage.
-
-**Interpretation.** This is a one-season observational study. Goal windows within the same match are not fully independent, and contextual splits can become small.
-''')
