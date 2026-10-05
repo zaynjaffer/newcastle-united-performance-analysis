@@ -25,11 +25,22 @@ def load_data():
 d=load_data(); W=d['windows']; S=d['shots']; G=d['goals']; P=d['players']; PA=d['pairs']
 
 st.markdown('''<style>
-.block-container{padding-top:1.25rem;max-width:1400px}.metric-card{border:1px solid #ddd;border-radius:12px;padding:12px}.small{color:#666;font-size:.9rem}
+.block-container{padding-top:1.4rem;max-width:1400px}
+.hero{padding:1.45rem 1.55rem;border:1px solid rgba(128,128,128,.28);border-radius:18px;margin-bottom:1rem;background:linear-gradient(135deg,rgba(128,128,128,.08),rgba(128,128,128,.02))}
+.hero h1{margin:0 0 .35rem 0;font-size:2.45rem;line-height:1.05}
+.hero p{font-size:1.05rem;margin:.2rem 0;color:rgba(128,128,128,.95)}
+.hero .finding{margin-top:.85rem;padding:.75rem .9rem;border-left:4px solid #888;border-radius:6px;background:rgba(128,128,128,.08);font-size:1rem}
+.metric-card{border:1px solid #ddd;border-radius:12px;padding:12px}.small{color:#666;font-size:.9rem}
 </style>''',unsafe_allow_html=True)
 
-st.title('Newcastle United 2025/26 — Post-Goal Control')
-st.caption('Interactive portfolio dashboard | 38 Premier League matches • 962 shots • 108 goals')
+st.markdown('''
+<div class="hero">
+  <h1>Newcastle United 2025/26 — Post-Goal Control</h1>
+  <p>An event-level analysis of how Newcastle maintain and lose control after scoring.</p>
+  <p><b>38 Premier League matches · 962 shots · 108 goal events · 5/10/15-minute windows</b></p>
+  <div class="finding"><b>Key finding:</b> Newcastle's ability to maintain territorial pressure after scoring is strongly associated with retaining shot and chance-quality control — with a notable deterioration away from home.</div>
+</div>
+''', unsafe_allow_html=True)
 
 page=st.sidebar.radio('Explore', ['Overview','Post-goal analysis','Shot map','Why control changes','Players & units','Match explorer','Methodology'])
 st.sidebar.markdown('---')
@@ -66,8 +77,8 @@ if page=='Overview':
     c2.metric('15m SOT differential',f"{q.sot_diff.mean():+.2f}")
     c3.metric('15m PGCI',f"{q.PGCI.mean():.1f}")
     c4.metric('Qualifying goal windows',len(q))
-    st.subheader('The story')
-    st.write('Newcastle generally retain better chance quality after scoring, but the effect weakens away from home. The strongest tactical separator in the study is whether Newcastle maintain positive territorial pressure after going ahead.')
+    st.subheader('Explore the analysis')
+    st.write('Newcastle generally retain better chance quality after scoring, but the effect weakens away from home. The strongest tactical separator in the study is whether Newcastle maintain positive territorial pressure after going ahead. Use the sidebar to move from the headline result into post-goal windows, shot locations, tactical mechanisms, player combinations and individual matches.')
     a=complete('Scored',15).groupby('venue',as_index=False).agg(PGCI=('PGCI','mean'),xG_diff=('xg_diff','mean'),SOT_diff=('sot_diff','mean'))
     col1,col2=st.columns(2)
     with col1: st.plotly_chart(px.bar(a,x='venue',y='PGCI',text_auto='.1f',title='Post-score control by venue').add_hline(y=50,line_dash='dash'),use_container_width=True)
