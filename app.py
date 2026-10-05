@@ -189,3 +189,5 @@ else:
 **Player analysis.** A player counts as present only when he remains on the pitch for the entire 15-minute post-score window. Pair and player outputs are descriptive associations and should be used to identify video-review questions, not to claim causal player effects.
 
 **Territorial pressure.** The source dataset's minute-level momentum signal is used as a territory/pressure proxy and re-signed so positive values favour Newcastle. It is not possession percentage.
+
+''')
